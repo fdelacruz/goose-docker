@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile
     container_name: goose-cli
     env_file:
-      - /home/fdelacruz/goose-docker/.env
+      - /home/ubuntu/goose-docker/.env
     working_dir: /root/workspace
     volumes:
       - ./goose:/goose                                # Mount local goose dir
