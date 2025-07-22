@@ -1,0 +1,35 @@
+services:
+  goose-cli:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: goose-cli
+    env_file:
+      - /home/fdelacruz/goose-docker/.env
+    working_dir: /root/workspace
+    volumes:
+      - ./goose:/goose                         # Mount local goose dir
+      - /home/fdelacruz/workspace:/root/workspace  # Mount project workspace
+      - goose-config:/root/.goose              # Persist goose config
+      - ~/.gitconfig:/root/.gitconfig:ro       # Git config (read-only)
+      - ~/.ssh:/root/.ssh:ro                   # SSH credentials (read-only)
+    environment:
+      - EDITOR=vim
+      # - GOOSE_PROVIDER=openai
+      # - GOOSE_MODEL=gpt-4o
+      # - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - GOOSE_PROVIDER=google
+      - GOOSE_MODEL=gemini-1.5-flash
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - GIT_AUTHOR_NAME=${git_author_name:-Goose User}
+      - GIT_AUTHOR_EMAIL=${git_author_email:-goose@example.com}
+      - DBUS_SESSION_BUS_ADDRESS
+      - GNOME_KEYRING_CONTROL
+      - SSH_AUTH_SOCK
+    stdin_open: true
+    tty: true
+    entrypoint: ["/bin/bash"]
+
+volumes:
+  goose-config:
+

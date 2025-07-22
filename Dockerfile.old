@@ -1,0 +1,27 @@
+# Use official Python image with Debian Bookworm base
+FROM python:3.12-bookworm
+
+
+# Prepare temp directory and install system dependencies
+RUN mkdir -p /tmp && chmod 1777 /tmp && \
+    apt-get update && \
+    apt-get install -y \
+        curl \
+        bzip2 \
+        git \
+        vim \
+        openssh-client && \
+    rm -rf /var/lib/apt/lists/*
+
+# Download and install Goose CLI (ARM64 for Raspberry Pi)
+RUN curl -L -o /tmp/goose.tar.bz2 https://github.com/block/goose/releases/download/stable/goose-aarch64-unknown-linux-gnu.tar.bz2 && \
+    tar -xjf /tmp/goose.tar.bz2 -C /tmp/ && \
+    mv /tmp/goose /usr/local/bin/goose && \
+    chmod +x /usr/local/bin/goose && \
+    rm /tmp/goose.tar.bz2
+
+# Set working directory inside the container
+WORKDIR /root/workspace
+
+# Add Goose to PATH for all shells
+ENV PATH="/usr/local/bin:$PATH"

@@ -1,0 +1,35 @@
+# Stage 1: Builder (used to fetch goose and install dependencies)
+FROM python:3.12-bookworm AS builder
+
+# Install build dependencies
+RUN apt-get update && \
+    apt-get install -y \
+        curl \
+        bzip2 && \
+    rm -rf /var/lib/apt/lists/*
+
+# Download and extract Goose CLI (ARM64 version)
+RUN curl -L -o /tmp/goose.tar.bz2 https://github.com/block/goose/releases/download/stable/goose-aarch64-unknown-linux-gnu.tar.bz2 && \
+    tar -xjf /tmp/goose.tar.bz2 -C /tmp/ && \
+    chmod +x /tmp/goose && \
+    mv /tmp/goose /goose
+
+# Stage 2: Runtime container
+FROM python:3.12-slim
+
+# Set working directory
+WORKDIR /root/workspace
+
+# Install only runtime tools you need (optional: maybe remove vim/git/ssh here)
+RUN apt-get update && \
+    apt-get install -y libxcb1 && \ # this one is need still
+    rm -rf /var/lib/apt/lists/*
+
+# Copy Goose binary from builder stage
+COPY --from=builder /goose /usr/local/bin/goose
+
+# Add Goose to PATH
+ENV PATH="/usr/local/bin:$PATH"
+
+# Default shell (optional, if you're dropping into container via bash)
+ENTRYPOINT ["/bin/bash"]
