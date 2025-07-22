@@ -9,8 +9,7 @@ services:
     working_dir: /root/workspace
     volumes:
       - ./goose:/goose                                # Mount local goose dir
-      - /home/fdelacruz/workspace:/root/workspace     # Mount project workspace
-      - goose-config:/root/.goose                     # Persist goose config
+      - ~/workspace:/root/workspace                   # Mount project workspace
       - ~/.gitconfig:/root/.gitconfig:ro              # Git config (read-only)
       - ~/.ssh:/root/.ssh:ro                          # SSH credentials (read-only)
       - ./goose:/goose                                # Mount local goose dir
