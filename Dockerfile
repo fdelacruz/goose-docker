@@ -20,4 +20,3 @@ RUN apt-get update && \
 COPY --from=builder /usr/local/bin/goose /usr/local/bin/goose
 
 ENV PATH="/usr/local/bin:$PATH"
-ENTRYPOINT ["/usr/local/bin/goose", "--help"]
