@@ -8,11 +8,6 @@ services:
       - /home/ubuntu/goose-docker/.env
     working_dir: /root/workspace
     volumes:
-      - ./goose:/goose                                # Mount local goose dir
-      - ~/workspace:/root/workspace                   # Mount project workspace
-      - ~/.gitconfig:/root/.gitconfig:ro              # Git config (read-only)
-      - ~/.ssh:/root/.ssh:ro                          # SSH credentials (read-only)
-      - ./goose:/goose                                # Mount local goose dir
       - ~/workspace:/root/workspace                   # Mount project workspace
       - ~/.goose-config:/root/.config/goose           # Persist goose config
       - ~/.gitconfig:/root/.gitconfig:ro              # Git config (read-only)
